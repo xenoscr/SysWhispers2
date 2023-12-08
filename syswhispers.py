@@ -622,7 +622,7 @@ __asm__(".intel_syntax noprefix \\n\\
         mov r9, [rsp+32] \\n\\
         mov r10, rcx \\n\\
         pop qword ptr [returnAddress + RIP] \\n\\
-        call qword ptr [syscallAddress + RIP] \n\
+        call qword ptr [syscallAddress + RIP] \\n\\
         push qword ptr [returnAddress + RIP] \\n\\
         ret \\n\\
     "
