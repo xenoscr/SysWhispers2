@@ -10,7 +10,6 @@ import struct
 class SysWhispers(object):
     def __init__(self, function_prefix):
         self.__function_prefix = function_prefix
-
         self.seed = random.randint(2 ** 28, 2 ** 32 - 1)
         self.typedefs: list = json.load(open(os.path.join(os.path.dirname(__file__), "data", "typedefs.json")))
         self.prototypes: dict = json.load(open(os.path.join(os.path.dirname(__file__), "data", "prototypes.json")))
@@ -599,33 +598,33 @@ uint64_t syscallAddress = 0;
 
 __declspec(naked) void WhisperMain(void)
 {
-__asm__(".intel_syntax noprefix \n\
-    .global WhisperMain \n\
-    WhisperMain: \n\
-        pop rax \n\
-        mov [rsp+ 8], rcx \n\
-        mov [rsp+16], rdx \n\
-        mov [rsp+24], r8 \n\
-        mov [rsp+32], r9 \n\
-        sub rsp, 0x28 \n\
-        mov rcx, r10 \n\
-        call SW2_GetSyscallNumber \n\
-        mov dword ptr [syscallNumber + RIP], eax  \n\
-        xor rcx, rcx \n\
-        call SW2_GetRandomSyscallAddress \n\
-        mov qword ptr [syscallAddress + RIP], rax \n\
-        xor rax, rax \n\
-        mov eax, dword ptr [syscallNumber + RIP] \n\
-        add rsp, 0x28 \n\
-        mov rcx, [rsp+ 8] \n\
-        mov rdx, [rsp+16] \n\
-        mov r8, [rsp+24] \n\
-        mov r9, [rsp+32] \n\
-        mov r10, rcx \n\
-        pop qword ptr [returnAddress + RIP] \n\
+__asm__(".intel_syntax noprefix \\n\\
+    .global WhisperMain \\n\\
+    WhisperMain: \\n\\
+        pop rax \\n\\
+        mov [rsp+ 8], rcx \\n\\
+        mov [rsp+16], rdx \\n\\
+        mov [rsp+24], r8 \\n\\
+        mov [rsp+32], r9 \\n\\
+        sub rsp, 0x28 \\n\\
+        mov rcx, r10 \\n\\
+        call SW2_GetSyscallNumber \\n\\
+        mov dword ptr [syscallNumber + RIP], eax  \\n\\
+        xor rcx, rcx \\n\\
+        call SW2_GetRandomSyscallAddress \\n\\
+        mov qword ptr [syscallAddress + RIP], rax \\n\\
+        xor rax, rax \\n\\
+        mov eax, dword ptr [syscallNumber + RIP] \\n\\
+        add rsp, 0x28 \\n\\
+        mov rcx, [rsp+ 8] \\n\\
+        mov rdx, [rsp+16] \\n\\
+        mov r8, [rsp+24] \\n\\
+        mov r9, [rsp+32] \\n\\
+        mov r10, rcx \\n\\
+        pop qword ptr [returnAddress + RIP] \\n\\
         call qword ptr [syscallAddress + RIP] \n\
-        push qword ptr [returnAddress + RIP] \n\
-        ret \n\
+        push qword ptr [returnAddress + RIP] \\n\\
+        ret \\n\\
     "
     : [returnAddress] "+m" (returnAddress), [syscallNumber] "+m" (syscallNumber), [syscallAddress] "+m" (syscallAddress)
     :
